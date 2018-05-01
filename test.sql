@@ -9,33 +9,33 @@ SELECT @LicenseType = {LicenseType}
 
 SELECT * FROM (
 	SELECT DISTINCT 
-		E.eFirstName + ' ' + E.eLastName 																									AS [Employee Name],
-		E.ID 																																AS [EmployeeID],
-		E.eLicenseNumber 																													AS [License Number],
-		ET.EmployeeType																														AS [License Type],
-		E.eTypeID 																															AS [LicenseID],
-		EC.Label 																															AS [Checklist],
-		A.DateCompleted 																													AS [DateCompleted],
+		E.eFirstName + ' ' + E.eLastName AS [Employee Name],
+		E.ID AS [EmployeeID],
+		E.eLicenseNumber AS [License Number],
+		ET.EmployeeType AS [License Type],
+		E.eTypeID AS [LicenseID],
+		EC.Label AS [Checklist],
+		A.DateCompleted AS [DateCompleted],
 		ISNULL((SELECT 
 					CAST(DATEDIFF(DAY, DateCreated, DateCompleted) AS VARCHAR)
 				FROM Applications 
-				WHERE ID = (SELECT MAX (ID) FROM Applications WHERE ChecklistID = EC.ID AND ChecklistID IS NOT NULL)), 'No Record')			AS [Application],
+				WHERE ID = (SELECT MAX (ID) FROM Applications WHERE ChecklistID = EC.ID AND ChecklistID IS NOT NULL)), 'No Record') AS [Application],
 		ISNULL((SELECT 
 					CAST(DATEDIFF (Day, SubmittedAt, CompletedAt) AS VARCHAR)  
 				FROM BackgroundChecks bc
-				WHERE BC.ID = (SELECT MAX (BC.ID) FROM BackgroundChecks BC WHERE BC.EmployeeID = E.ID)), 'No Record')						AS [Background Check],
+				WHERE BC.ID = (SELECT MAX (BC.ID) FROM BackgroundChecks BC WHERE BC.EmployeeID = E.ID)), 'No Record') AS [Background Check],
 		ISNULL((SELECT 
 					CAST(DATEDIFF (Day, DateCreated, sDateSubmitted) AS VARCHAR) 
 				FROM SuitabilityReport 
-				WHERE ID = (SELECT MAX (ID) FROM SuitabilityReport WHERE ChecklistID = EC.ID AND ChecklistID IS NOT NULL)), 'No Record')	AS [Suitability],
+				WHERE ID = (SELECT MAX (ID) FROM SuitabilityReport WHERE ChecklistID = EC.ID AND ChecklistID IS NOT NULL)), 'No Record') AS [Suitability],
 		ISNULL((SELECT 
 					CAST(DATEDIFF (Day, DateCreated, DateSubmitted) AS VARCHAR)
 				FROM NORs 
-				WHERE ID = (SELECT MAX (ID) FROM NORs WHERE ChecklistID = EC.ID AND ChecklistID IS NOT NULL)), 'No Record')					AS [NOR],
+				WHERE ID = (SELECT MAX (ID) FROM NORs WHERE ChecklistID = EC.ID AND ChecklistID IS NOT NULL)), 'No Record') AS [NOR],
 		ISNULL((SELECT 
 					CAST(DATEDIFF (Day, DateCreated, DateSubmitted) AS VARCHAR) 
 				FROM NOI 
-				WHERE ID = (SELECT MAX (ID) FROM NOI WHERE ChecklistID = EC.ID AND ChecklistID IS NOT NULL)), 'No Record')					AS [NOI]
+				WHERE ID = (SELECT MAX (ID) FROM NOI WHERE ChecklistID = EC.ID AND ChecklistID IS NOT NULL)), 'No Record') AS [NOI]
 	FROM Database.dbo.employees E
 	LEFT JOIN EmployeeChecklists EC 
 		ON E.ID = EC.cEmployeeID
@@ -48,33 +48,33 @@ SELECT * FROM (
 	UNION
 
 	SELECT DISTINCT 
-		E.eFirstName + ' ' + E.eLastName 																									AS [Employee Name],
-		E.ID 																																AS [EmployeeID],
-		E.eLicenseNumber 																													AS [License Number],
-		ET.EmployeeType																														AS [License Type],
-		E.eTypeID 																															AS [LicenseID],
-		ISNULL(EC.Label,'Initial License')																									AS [Checklist],
-		A.DateCompleted 																													AS [DateCompleted],
+		E.eFirstName + ' ' + E.eLastName AS [Employee Name],
+		E.ID AS [EmployeeID],
+		E.eLicenseNumber AS [License Number],
+		ET.EmployeeType AS [License Type],
+		E.eTypeID AS [LicenseID],
+		ISNULL(EC.Label,'Initial License') AS [Checklist],
+		A.DateCompleted AS [DateCompleted],
 		ISNULL((SELECT 
 					CAST(DATEDIFF (Day, DateCreated, DateCompleted) AS VARCHAR) 
 				FROM Applications 
-				WHERE ID = (SELECT MAX (ID) FROM Applications WHERE EmployeeID = E.ID)), 'No Record')										AS [Application],
+				WHERE ID = (SELECT MAX (ID) FROM Applications WHERE EmployeeID = E.ID)), 'No Record') AS [Application],
 		ISNULL((SELECT 
 					CAST(DATEDIFF (Day, SubmittedAt, CompletedAt) AS VARCHAR) 
 				FROM BackgroundChecks bc 
-				WHERE ID = (SELECT MAX (ID) FROM BackgroundChecks WHERE BC.EmployeeID = E.ID)), 'No Record')								AS [Background Check],
+				WHERE ID = (SELECT MAX (ID) FROM BackgroundChecks WHERE BC.EmployeeID = E.ID)), 'No Record') AS [Background Check],
 		ISNULL((SELECT 
 					CAST(DATEDIFF (Day, DateCreated, sDateSubmitted) AS VARCHAR)
 				FROM SuitabilityReport
-				WHERE ID = (SELECT MAX (ID) ID FROM SuitabilityReport WHERE sEmployeeID = E.ID)), 'No Record')								AS [Suitability],
+				WHERE ID = (SELECT MAX (ID) ID FROM SuitabilityReport WHERE sEmployeeID = E.ID)), 'No Record') AS [Suitability],
 		ISNULL((SELECT 
 					CAST(DATEDIFF (Day, DateCreated, DateSubmitted) AS VARCHAR)
 				FROM NORs
-				WHERE ID = (SELECT MAX (ID) FROM NORs WHERE EmployeeID = E.ID)), 'No Record')												AS [NOR],
+				WHERE ID = (SELECT MAX (ID) FROM NORs WHERE EmployeeID = E.ID)), 'No Record') AS [NOR],
 		ISNULL((SELECT 
 					CAST(DATEDIFF (Day, DateCreated, DateSubmitted) AS VARCHAR) 
 				FROM NOI 
-				WHERE ID = (SELECT MAX (ID) FROM NOI WHERE EmployeeID = E.ID)), 'No Record')												AS [NOI]
+				WHERE ID = (SELECT MAX (ID) FROM NOI WHERE EmployeeID = E.ID)), 'No Record') AS [NOI]
 	FROM Database.dbo.employees E
 	LEFT JOIN EmployeeChecklists EC 
 		ON E.ID = ec.cEmployeeID
