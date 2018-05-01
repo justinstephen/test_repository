@@ -17,7 +17,7 @@ SELECT * FROM (
 		EC.Label AS [Checklist],
 		A.DateCompleted AS [DateCompleted],
 		ISNULL((SELECT 
-					CAST(DATEDIFF(DAY, DateCreated, DateCompleted) AS VARCHAR)
+			        CAST(DATEDIFF(DAY, DateCreated, DateCompleted) AS VARCHAR)
 				FROM Applications 
 				WHERE ID = (SELECT MAX (ID) FROM Applications WHERE ChecklistID = EC.ID AND ChecklistID IS NOT NULL)), 'No Record') AS [Application],
 		ISNULL((SELECT 
